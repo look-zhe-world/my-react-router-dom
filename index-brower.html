@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+   
+    <div id="root"></div>
+</body>
+<script>
+    // history 栈结构
+    // brower 路由 有三种跳转方式 1.popState（弹出（退回，history.go/back（-。。）））   2.pushState() 添加记录 3.replace (替换当前路由)
+    // 1) 有时间监听
+    window.onpopstate = function(event){
+        console.log({
+            state:event.state,
+            pathname:window.location.pathname,
+            type:'popstate',
+        })
+    };
+    //2) pushstate 没有对应的事件监听 ，只能通过切片编程aop的形式重写
+    /**
+     * state => 会改变window.history.state 的值
+     * title 标题 基本没用
+     * pathname => 要跳转的路径
+     * window.history.pushState()  是一个方法  
+    */
+   window.onpushstate = function(event){
+       console.log(event, 'event');
+   };
+
+    // 模拟onpopstate => onpushstate
+    (function(history){
+        // 重写 history.pushState() 方法  
+        const pushState = history.pushState;
+        history.pushState = function(state,title,pathname){
+            if(typeof window.onpushstate === 'function'){
+                window.onpushstate({state,title,pathname,type:'pushstate'});
+            };
+            return pushState.apply(history,arguments);
+        }
+        
+    })(window.history);
+
+    setTimeout(()=>{
+        window.history.pushState({name:'1'},'1','/1');
+    },3000);
+
+</script>
+</html>
