@@ -156,6 +156,38 @@ module.exports = {
           }),
       },
       {
+        test: /\.css$/,
+        include: [resolve("node_modules")],  // node_modules 里面的less文件不能启用 css module
+        use: []
+          .concat([
+            // "style-loader",  //作为style标签进行插入
+            MiniCssExtractPlugin.loader, //提取成css文件
+            {
+              loader: "css-loader",
+              // options: {
+              // },
+            },
+            // "postcss-loader", //对css文件可以做大量处理
+          ]),
+      },
+      {
+        test: /\.css$/,
+        include: [resolve("src")],  // node_modules 里面的less文件不能启用 css module
+        use: []
+          .concat([
+            // "style-loader",  //作为style标签进行插入
+            MiniCssExtractPlugin.loader, //提取成css文件
+            {
+              loader: 
+              "css-loader",
+              // options: {
+              // },
+            }
+            ,
+            // "postcss-loader", //对css文件可以做大量处理
+          ]),
+      },
+      {
         test: /\.(png|jpe?g|gif)(\?.*)?$/,
         loader: "url-loader",
         options: {
@@ -181,9 +213,17 @@ module.exports = {
       {
         test: /\.(svg)$/,
         use: ["svg-sprite-loader"],
-        // include: [resolve("src")],
+        include: [resolve("src")],
         // loader: ["url-loader?limit=1"],
       },
+      {   // 配置-额外的一些配置 统一使用 file-loader 进行处理
+        test: /\.(png|jpg|jpeg|gif|ico|svg|webp|ttf|woff2|woff|eot)$/,   
+        loader: 'file-loader',   
+        // include: [resolve("node_modules")],
+        options: {
+            name:  path.posix.join("static", 'images/[name].[hash:8].[ext]'),
+        }
+      }
     ],
   },
   //排除依赖性打包，通过配置直接进行打包

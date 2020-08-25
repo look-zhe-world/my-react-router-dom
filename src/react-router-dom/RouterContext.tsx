@@ -1,6 +1,6 @@
 import { createContext } from 'react';
-import {RouterContextValue} from './';
+import {RouteComponentProps} from './';
 
-const RouterContext = createContext<RouterContextValue>({});
+const RouterContext = createContext<RouteComponentProps>({});
 
 export default RouterContext;

@@ -12,15 +12,18 @@
 <script>
     // history 栈结构
     // brower 路由 有三种跳转方式 1.popState（弹出（退回，history.go/back（-。。）））   2.pushState() 添加记录 3.replace (替换当前路由)
-    // 1) 有时间监听
+    // 1)  popState 有事件监听
     window.onpopstate = function(event){
+        event.stopPropagation();
         console.log({
+            event,
             state:event.state,
             pathname:window.location.pathname,
             type:'popstate',
         })
     };
     //2) pushstate 没有对应的事件监听 ，只能通过切片编程aop的形式重写
+    // 3) replacestate 也没有对应的时间监听
     /**
      * state => 会改变window.history.state 的值
      * title 标题 基本没用
@@ -44,9 +47,9 @@
         
     })(window.history);
 
-    setTimeout(()=>{
-        window.history.pushState({name:'1'},'1','/1');
-    },3000);
+    // setTimeout(()=>{
+    //     window.history.pushState({name:'1'},'1','/1');
+    // },3000);
 
 </script>
 </html>
